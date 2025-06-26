@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>독일에서 만난 하나님</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <!-- PDF 기능용 jsPDF 라이브러리 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  </head>
+  <body>
+    <header>
+      <div class="header-bar">
+        <div class="header-left">
+          <span class="flag">🇰🇷</span>
+          <span class="flag">🇩🇪</span>
+          <span class="title">독일에서 만난 하나님</span>
+        </div>
+        <div class="header-right">
+          <div class="currency-wrap">
+            <select id="currency-select">
+              <option value="KRW">KRW(원)</option>
+              <option value="EUR">EUR(유로)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="subtitle-row">
+        <span id="exchange-rate">(1,000원=0.63유로, 1유로=1,530원)</span>
+      </div>
+    </header>
+    <main>
+      <section id="summary" class="summary-row">
+        <div class="summary-item income">
+          <span>총수입</span>
+          <strong id="total-income">0원</strong>
+        </div>
+        <div class="summary-item expense">
+          <span>총지출</span>
+          <strong id="total-expense">0원</strong>
+        </div>
+        <div class="summary-item balance">
+          <span>총잔액</span>
+          <strong id="total-balance">0원</strong>
+        </div>
+      </section>
+
+      <section id="menu">
+        <button class="menu-btn active" data-menu="input">
+          날짜입력/입출금입력
+        </button>
+        <button class="menu-btn" data-menu="report">
+          보고서 보기/내보내기
+        </button>
+        <button class="menu-btn" data-menu="receipt">영수증 사진 저장</button>
+        <!-- 메인 화면 버튼 추가 -->
+        <button class="menu-btn" data-menu="main" id="main-menu-btn">
+          메인 화면
+        </button>
+      </section>
+
+      <section id="input-section" class="menu-section">
+        <form id="transaction-form">
+          <label>날짜 <input type="date" id="date-input" required /></label>
+          <label
+            >분류
+            <select id="type-select">
+              <option value="income">수입</option>
+              <option value="expense">지출</option>
+            </select>
+          </label>
+          <label
+            >항목
+            <select id="category-select"></select>
+          </label>
+          <label
+            >금액
+            <input
+              type="text"
+              id="amount-input"
+              required
+              inputmode="numeric"
+              autocomplete="off"
+          /></label>
+          <label
+            >상세항목 <input type="text" id="detail-input" maxlength="50"
+          /></label>
+          <button type="submit">저장</button>
+        </form>
+      </section>
+
+      <section id="report-section" class="menu-section">
+        <div id="report-content"></div>
+        <button id="copy-report">텍스트로 복사</button>
+        <button id="export-pdf">PDF로 저장</button>
+        <div class="guide">
+          복사버튼을 누르면 텍스트로 복사되어, 카톡/이메일 등으로 보낼 수
+          있습니다.<br />
+          PDF로 저장하면 핸드폰에서도 쉽게 공유할 수 있습니다.
+        </div>
+      </section>
+
+      <section id="receipt-section" class="menu-section">
+        <input
+          id="camera-input"
+          type="file"
+          accept="image/*"
+          capture="environment"
+          style="display: none"
+        />
+        <button id="open-camera">영수증 사진 찍기/저장</button>
+        <div id="photo-preview"></div>
+        <div id="photo-guide">
+          사진 촬영 기능은 아이폰/안드로이드에서 정상 작동합니다.
+        </div>
+      </section>
+
+      <div id="daily-reports"></div>
+
+      <!-- 상세/수정 모달 -->
+      <div id="edit-modal" class="modal" style="display: none">
+        <div class="modal-content">
+          <h2>내역 상세/수정</h2>
+          <form id="edit-form">
+            <input type="hidden" id="edit-id" />
+            <label>날짜 <input type="date" id="edit-date" required /></label>
+            <label
+              >분류
+              <select id="edit-type">
+                <option value="income">수입</option>
+                <option value="expense">지출</option>
+              </select>
+            </label>
+            <label
+              >항목
+              <select id="edit-category"></select>
+            </label>
+            <label
+              >금액
+              <input type="text" id="edit-amount" required inputmode="numeric"
+            /></label>
+            <label
+              >상세항목 <input type="text" id="edit-detail" maxlength="50"
+            /></label>
+            <div class="modal-btn-row">
+              <button type="submit">수정저장</button>
+              <button
+                type="button"
+                id="delete-transaction"
+                style="background: #f9806f"
+              >
+                삭제
+              </button>
+              <button type="button" id="close-modal">닫기</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </main>
+    <script src="script.js"></script>
+  </body>
+</html>
