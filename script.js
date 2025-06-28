@@ -83,11 +83,18 @@ document.getElementById("transaction-form").addEventListener("submit", (e) => {
   fillCategoryOptions("income", categorySelect);
   updateSummary();
   updateDailyReports();
-  document.getElementById("input-section").classList.remove("active");
+  // 입력 후 "메인 화면" 상태로 전환 (모든 메뉴 비활성/숨김)
+  hideAllSections();
+});
+
+function hideAllSections() {
+  document
+    .querySelectorAll(".menu-section")
+    .forEach((sec) => sec.classList.remove("active"));
   document
     .querySelectorAll(".menu-btn")
     .forEach((btn) => btn.classList.remove("active"));
-});
+}
 
 document.querySelectorAll(".menu-btn").forEach((btn) => {
   btn.addEventListener("click", function () {
@@ -109,11 +116,17 @@ document.querySelectorAll(".menu-btn").forEach((btn) => {
       document.getElementById("receipt-section").classList.add("active");
     }
     if (this.dataset.menu === "main") {
-      document.getElementById("input-section").classList.remove("active");
-      document.getElementById("report-section").classList.remove("active");
-      document.getElementById("receipt-section").classList.remove("active");
+      hideAllSections();
     }
   });
+});
+
+// 앱 시작시(새로고침) "메인 화면"처럼, 모든 메뉴/폼이 비활성화(아무것도 안 켜짐)
+window.addEventListener("DOMContentLoaded", () => {
+  hideAllSections();
+  updateSummary();
+  updateDailyReports();
+  updateExchangeDisplay();
 });
 
 function updateSummary() {
@@ -137,7 +150,6 @@ function updateSummary() {
     currentCurrency
   );
 }
-updateSummary();
 
 const pastelColors = [
   "#ffe5ec",
@@ -202,12 +214,10 @@ function updateDailyReports() {
         .join("")}
       </ul>
     `;
-    // 일별 박스 전체 클릭시 -> 전체 수정 모달
     box.addEventListener("click", () => showEditDayModal(date));
     container.appendChild(box);
   });
 }
-updateDailyReports();
 
 // ----- 일별 박스 전체 수정 모달 기능 -----
 const editDayModal = document.getElementById("edit-day-modal");
@@ -222,7 +232,6 @@ function showEditDayModal(date) {
   editDayEntries.innerHTML = "";
   const editItems = transactions.filter((tr) => tr.date === date);
   editItems.forEach((tr, idx) => {
-    // 각각의 항목은 한줄씩 인풋(분류, 항목, 금액, 상세항목)으로 노출
     const row = document.createElement("div");
     row.className = "edit-day-row";
     row.innerHTML = `
@@ -242,7 +251,6 @@ function showEditDayModal(date) {
       }" />
       <button type="button" class="delete-day-entry" title="삭제">🗑</button>
     `;
-    // 분류 선택에 따라 항목 선택 자동 변경
     const typeSelect = row.querySelector(".edit-type");
     const categorySelect = row.querySelector(".edit-category");
     typeSelect.addEventListener("change", (e) => {
@@ -250,7 +258,6 @@ function showEditDayModal(date) {
     });
     fillCategoryOptions(tr.type, categorySelect);
     categorySelect.value = tr.category;
-    // 금액 ',' 자동
     row.querySelector(".edit-amount").addEventListener("input", (e) => {
       let val = e.target.value.replace(/[^0-9]/g, "");
       if (!val) {
@@ -259,14 +266,13 @@ function showEditDayModal(date) {
       }
       e.target.value = Number(val).toLocaleString();
     });
-    // 삭제버튼
     row.querySelector(".delete-day-entry").onclick = () => {
       if (confirm("이 항목을 삭제할까요?")) {
         transactions = transactions.filter((x) => x.id !== tr.id);
         saveTransactions();
         updateSummary();
         updateDailyReports();
-        showEditDayModal(date); // 새로고침
+        showEditDayModal(date);
       }
     };
     editDayEntries.appendChild(row);
