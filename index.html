@@ -8,31 +8,34 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   </head>
   <body>
-    <header>
-      <div class="header-left">
-        <img
-          src="https://cdn.jsdelivr.net/gh/hjnilsson/country-flags/svg/de.svg"
-          alt="de"
-          class="flag"
-        />
-        <img
-          src="https://cdn.jsdelivr.net/gh/hjnilsson/country-flags/svg/kr.svg"
-          alt="kr"
-          class="flag"
-        />
-        <span class="app-title">Ride Mission 독일팀</span>
-      </div>
-      <div class="header-right">
-        <select id="currency-select" class="currency-select">
-          <option value="KRW">KRW(원)</option>
-          <option value="EUR">EUR(유로)</option>
-        </select>
-      </div>
-    </header>
-    <div class="exchange-rate-row">
-      <span id="exchange-rate" class="exchange-rate"></span>
-    </div>
     <main>
+      <header>
+        <div class="header-row">
+          <div class="header-left">
+            <img
+              src="https://cdn.jsdelivr.net/gh/hjnilsson/country-flags/svg/de.svg"
+              class="flag"
+              alt="독일 국기"
+            />
+            <img
+              src="https://cdn.jsdelivr.net/gh/hjnilsson/country-flags/svg/kr.svg"
+              class="flag"
+              alt="한국 국기"
+            />
+            <span class="app-title">Ride Mission 독일팀</span>
+          </div>
+          <div class="header-right">
+            <select id="currency-select" class="currency-select">
+              <option value="KRW">KRW(원)</option>
+              <option value="EUR">EUR(유로)</option>
+            </select>
+          </div>
+        </div>
+        <div class="exchange-rate-under-title">
+          <span id="exchange-rate" class="exchange-rate"></span>
+        </div>
+      </header>
+
       <section id="summary" class="summary-row">
         <div class="summary-col">
           <span class="summary-label">총수입</span>
@@ -48,16 +51,14 @@
         </div>
       </section>
       <section id="menu">
-        <button class="menu-btn active" data-menu="input">
-          날짜/입출금 입력
-        </button>
+        <button class="menu-btn" data-menu="input">날짜/입출금 입력</button>
         <button class="menu-btn" data-menu="report">
           보고서 보기/내보내기
         </button>
         <button class="menu-btn" data-menu="receipt">영수증 사진 저장</button>
         <button class="menu-btn" data-menu="main">메인 화면</button>
       </section>
-      <section id="input-section" class="menu-section active">
+      <section id="input-section" class="menu-section">
         <form id="transaction-form" class="input-form">
           <label
             >날짜
@@ -113,7 +114,6 @@
         </div>
       </section>
       <div id="daily-reports"></div>
-
       <!-- 일별 박스 전체 수정 모달 -->
       <div id="edit-day-modal" class="modal">
         <div
